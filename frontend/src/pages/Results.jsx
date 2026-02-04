@@ -21,6 +21,9 @@ const Results = () => {
   const [jobs, setJobs] = useState([]);
   const inferredRoles = useMemo(() => getInferredRoles(jobs), [jobs]);
 
+  const apiBaseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
   useEffect(() => {
     if (!file) return;
 
@@ -33,7 +36,7 @@ const Results = () => {
         formData.append("resume", file);
         formData.append("location", selectedLocation);
 
-        const res = await fetch("http://localhost:5000/api/resume/upload", {
+        const res = await fetch(`${apiBaseUrl}/api/resume/upload`, {
           method: "POST",
           body: formData,
         });
@@ -62,7 +65,7 @@ const Results = () => {
           setJobs(initialRecs);
         } else if (extractedSkills.length > 0) {
           const jobsRes = await fetch(
-            "http://localhost:5000/api/recommendations/live",
+            `${apiBaseUrl}/api/recommendations/live`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
